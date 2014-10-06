@@ -9,6 +9,9 @@
 #import "ViewController.h"
 
 @interface ViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *theFuture;
+@property (weak, nonatomic) IBOutlet UILabel *thePreCogs;
+@property CGPoint originalCenter;
 
 @end
 
@@ -16,7 +19,26 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    self.originalCenter = self.theFuture.center;
+}
+
+- (IBAction)onDrag:(UIPanGestureRecognizer *)panGesture{
+    //NSLog(@"On Drag");
+    CGPoint point = [panGesture locationInView:self.view];
+    self.theFuture.center = point;
+
+    if(panGesture.state == UIGestureRecognizerStateEnded ){
+        [UIView animateWithDuration:1.0 animations:^{
+            self.theFuture.center = self.originalCenter;
+        }];
+    }else{
+
+        if( CGRectContainsPoint(self.thePreCogs.frame, point)){
+            self.theFuture.backgroundColor = [UIColor redColor];
+            self.theFuture.text = @"A ficticious and incriminating future";
+            [self.theFuture sizeToFit];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {
